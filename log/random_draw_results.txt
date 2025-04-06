@@ -1,0 +1,29 @@
+Line No. | Attendee - Quiz Mapping:
+
+1. Terry Tseng: Scenario 1: Email Summary Generator
+2. Chester Lee: Scenario 2: CSV Data Cleaner
+3. Wilson Huang: Scenario 3: Job Listings Aggregator
+4. Mary Li: Scenario 4: FAQ Chatbot
+5. Wade Cai: Scenario 5: QR Code Generator
+6. Venurse Leong: Scenario 6: Sentiment Analysis Tool
+7. Ziv Lee: Scenario 7: Expense Tracker
+8. Lucas Lu: Scenario 8: Code Quality Checker
+9. Bill He: Scenario 9: Sales Dashboard
+10. Chloe Poon: Scenario 10: Weather Forecast API
+11. Burhan/Tito Panji: Scenario 1: Email Summary Generator
+12. Douglas Zheng: Scenario 2: CSV Data Cleaner
+13. Chris Su: Scenario 3: Job Listings Aggregator
+14. Packer Chen: Scenario 4: FAQ Chatbot
+15. Anny Zhou: Scenario 5: QR Code Generator
+16. Arnel Marquez: Scenario 6: Sentiment Analysis Tool
+17. Guo Ren: Scenario 7: Expense Tracker
+18. Bharath Rishivanth: Scenario 8: Code Quality Checker
+19. Brian Gao: Scenario 9: Sales Dashboard
+20. Eric Zhong: Scenario 10: Weather Forecast API
+21. Avry How: Scenario 1: Email Summary Generator
+22. Simon Liu: Scenario 2: CSV Data Cleaner
+23. Jerome Chiu: Scenario 3: Job Listings Aggregator
+24. Henry Nguyen/Brian Vu: Scenario 4: FAQ Chatbot
+25. Yan Cheung: Scenario 5: QR Code Generator
+26. Harry Liao: Scenario 6: Sentiment Analysis Tool
+27. Andy Kang: Scenario 7: Expense Tracker

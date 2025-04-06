@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Random Draw Results</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Random Draw Results</h1>
+        <form method="POST">
+            <button type="submit">Generate Random Draw</button>
+        </form>
+       
+        <table>
+            <thead>
+                <tr>
+                    <th>Line No.</th>
+                    <th>Attendee</th>
+                    <th>Quiz</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if results %}
+                    {% for line_no, (attendee, quiz) in results.items() %}
+                    <tr>
+                        <td>{{ line_no }}</td>
+                        <td>{{ attendee }}</td>
+                        <td>{{ quiz }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">No results to display. Click the button above to generate a random draw.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <form action="/export" method="GET">
+            <button type="submit">Export Results</button>
+        </form>
+    </div>
+</body>
+</html>
