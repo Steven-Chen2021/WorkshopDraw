@@ -1,29 +1,29 @@
 Line No. | Attendee - Quiz Mapping:
 
-1. Terry Tseng: Scenario 1: Email Summary Generator
-2. Chester Lee: Scenario 2: CSV Data Cleaner
-3. Wilson Huang: Scenario 3: Job Listings Aggregator
-4. Mary Li: Scenario 4: FAQ Chatbot
-5. Wade Cai: Scenario 5: QR Code Generator
-6. Venurse Leong: Scenario 6: Sentiment Analysis Tool
-7. Ziv Lee: Scenario 7: Expense Tracker
-8. Lucas Lu: Scenario 8: Code Quality Checker
-9. Bill He: Scenario 9: Sales Dashboard
-10. Chloe Poon: Scenario 10: Weather Forecast API
-11. Burhan/Tito Panji: Scenario 1: Email Summary Generator
-12. Douglas Zheng: Scenario 2: CSV Data Cleaner
-13. Chris Su: Scenario 3: Job Listings Aggregator
-14. Packer Chen: Scenario 4: FAQ Chatbot
-15. Anny Zhou: Scenario 5: QR Code Generator
-16. Arnel Marquez: Scenario 6: Sentiment Analysis Tool
-17. Guo Ren: Scenario 7: Expense Tracker
-18. Bharath Rishivanth: Scenario 8: Code Quality Checker
-19. Brian Gao: Scenario 9: Sales Dashboard
-20. Eric Zhong: Scenario 10: Weather Forecast API
-21. Avry How: Scenario 1: Email Summary Generator
-22. Simon Liu: Scenario 2: CSV Data Cleaner
-23. Jerome Chiu: Scenario 3: Job Listings Aggregator
-24. Henry Nguyen/Brian Vu: Scenario 4: FAQ Chatbot
-25. Yan Cheung: Scenario 5: QR Code Generator
+1. Bill He: Scenario 1: Email Summary Generator
+2. Brian Gao: Scenario 2: CSV Data Cleaner
+3. Yan Cheung: Scenario 3: Job Listings Aggregator
+4. Packer Chen: Scenario 4: FAQ Chatbot
+5. Terry Tseng: Scenario 5: QR Code Generator
+6. Avry How: Scenario 9: Sales Dashboard
+7. Henry Nguyen/Brian Vu: Scenario 7: Expense Tracker
+8. Bharath Rishivanth: Scenario 8: Code Quality Checker
+9. Chloe Poon: Scenario 9: Sales Dashboard
+10. Jerome Chiu: Scenario 10: Weather Forecast API
+11. Simon Liu: Scenario 1: Email Summary Generator
+12. Mary Li: Scenario 8: Code Quality Checker
+13. Douglas Zheng: Scenario 3: Job Listings Aggregator
+14. Chester Lee: Scenario 4: FAQ Chatbot
+15. Lucas Lu: Scenario 5: QR Code Generator
+16. Burhan/Tito Panji: Scenario 6: Sentiment Analysis Tool
+17. Ziv Lee: Scenario 7: Expense Tracker
+18. Wilson Huang: Scenario 8: Code Quality Checker
+19. Chris Su: Scenario 9: Sales Dashboard
+20. Arnel Marquez: Scenario 10: Weather Forecast API
+21. Andy Kang: Scenario 1: Email Summary Generator
+22. Eric Zhong: Scenario 2: CSV Data Cleaner
+23. Wade Cai: Scenario 3: Job Listings Aggregator
+24. Guo Ren: Scenario 4: FAQ Chatbot
+25. Venurse Leong: Scenario 5: QR Code Generator
 26. Harry Liao: Scenario 6: Sentiment Analysis Tool
-27. Andy Kang: Scenario 7: Expense Tracker
+27. Anny Zhou: Scenario 7: Expense Tracker

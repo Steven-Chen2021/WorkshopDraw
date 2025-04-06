@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, Response
 import random
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -57,8 +58,9 @@ def export_results():
     for line_no, (attendee, quiz) in results.items():
         output += f"{line_no}. {attendee}: {quiz}\n"
     
-    # Save the log file in the "log" folder
-    log_file_path = os.path.join(log_folder, "random_draw_results.txt")
+    # Save the log file in the "log" folder with a timestamp in the file name
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file_path = os.path.join(log_folder, f"random_draw_results_{timestamp}.txt")
     with open(log_file_path, "w") as log_file:
         log_file.write(output)
     
@@ -66,7 +68,7 @@ def export_results():
     return Response(
         output,
         mimetype="text/plain",
-        headers={"Content-Disposition": f"attachment;filename=random_draw_results.txt"}
+        headers={"Content-Disposition": f"attachment;filename=random_draw_results_{timestamp}.txt"}
     )
 
 @app.route('/update_results', methods=['POST'])

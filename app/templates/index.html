@@ -42,17 +42,29 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const quizzes = {{ quizzes | tojson | safe
-        }}; // 從後端傳遞測驗列表到前端
+            let quizList;
+            try {
+                quizList = JSON.parse('{{ quizzes | tojson | safe }}'); // 從後端傳遞測驗列表到前端
+                if (!Array.isArray(quizList)) {
+                    throw new Error('Invalid quiz list data');
+                }
+            } catch (error) {
+                console.error('Failed to load quiz list:', error);
+                quizList = []; // 預設為空陣列以防止錯誤
+            }
 
-        // 為每個 "Re-select" 按鈕添加點擊事件
-        document.querySelectorAll('.reassign-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                const attendee = button.getAttribute('data-attendee');
+            document.querySelectorAll('.reassign-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const attendee = button.getAttribute('data-attendee');
 
-                // 建立彈窗選擇測驗
-                const quizOptions = quizzes.map(quiz => `<option value="${quiz}">${quiz}</option>`).join('');
-                const selectionHtml = `
+                    // 檢查是否已存在彈窗
+                    if (document.getElementById('quiz-selection-popup')) {
+                        return;
+                    }
+
+                    // 建立彈窗選擇測驗
+                    const quizOptions = quizList.map(quiz => `<option value="${quiz}">${quiz}</option>`).join('');
+                    const selectionHtml = `
                         <div id="quiz-selection-popup" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black; z-index: 1000;">
                             <h3>Select a new quiz for ${attendee}</h3>
                             <select id="quiz-select">${quizOptions}</select>
@@ -60,46 +72,46 @@
                             <button id="cancel-selection">Cancel</button>
                         </div>
                     `;
-                document.body.insertAdjacentHTML('beforeend', selectionHtml);
+                    document.body.insertAdjacentHTML('beforeend', selectionHtml);
 
-                // 處理確認和取消按鈕
-                document.getElementById('confirm-selection').addEventListener('click', () => {
-                    const newQuiz = document.getElementById('quiz-select').value;
+                    // 處理確認和取消按鈕
+                    document.getElementById('confirm-selection').addEventListener('click', () => {
+                        const newQuiz = document.getElementById('quiz-select').value;
 
-                    // 發送更新請求到後端
-                    fetch('/reassign_quiz', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ attendee, quiz: newQuiz }),
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                // 更新表格中的測驗
-                                const row = document.querySelector(`.reassign-btn[data-attendee="${attendee}"]`).closest('tr');
-                                row.querySelector('.quiz').textContent = newQuiz;
-                                alert('Quiz reassigned successfully!');
-                            } else {
-                                alert('Failed to reassign quiz.');
-                            }
+                        // 發送更新請求到後端
+                        fetch('/reassign_quiz', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ attendee, quiz: newQuiz }),
                         })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('An error occurred while reassigning the quiz.');
-                        })
-                        .finally(() => {
-                            // 移除彈窗
-                            document.getElementById('quiz-selection-popup').remove();
-                        });
-                });
+                            .then(response => {
+                                if (response.ok) {
+                                    // 更新表格中的測驗
+                                    const row = document.querySelector(`.reassign-btn[data-attendee="${attendee}"]`).closest('tr');
+                                    row.querySelector('.quiz').textContent = newQuiz;
+                                    alert('Quiz reassigned successfully!');
+                                } else {
+                                    alert('Failed to reassign quiz.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('An error occurred while reassigning the quiz.');
+                            })
+                            .finally(() => {
+                                // 移除彈窗
+                                document.getElementById('quiz-selection-popup').remove();
+                            });
+                    });
 
-                document.getElementById('cancel-selection').addEventListener('click', () => {
-                    // 移除彈窗
-                    document.getElementById('quiz-selection-popup').remove();
+                    document.getElementById('cancel-selection').addEventListener('click', () => {
+                        // 移除彈窗
+                        document.getElementById('quiz-selection-popup').remove();
+                    });
                 });
             });
-        });
         });
     </script>
 </body>
