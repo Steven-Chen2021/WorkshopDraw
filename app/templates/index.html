@@ -13,13 +13,28 @@
         <button type="submit">Generate Random Draw</button>
     </form>
 
-    <ul id="result-list">
-        {% for line_no, (attendee, quiz) in results.items() %}
-        <li id="result-{{ line_no }}" class="result-item" draggable="true">
-            <span class="attendee">{{ attendee }}</span> - <span class="quiz">{{ quiz }}</span>
-        </li>
-        {% endfor %}
-    </ul>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Line No.</th>
+                <th>Attendee</th>
+                <th>Quiz</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="result-list">
+            {% for line_no, (attendee, quiz) in results.items() %}
+            <tr id="result-{{ line_no }}">
+                <td>{{ line_no }}</td>
+                <td class="attendee">{{ attendee }}</td>
+                <td class="quiz">{{ quiz }}</td>
+                <td>
+                    <button class="reassign-btn" data-attendee="{{ attendee }}">Re-select</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <form action="/export" method="GET">
         <button type="submit">Export Results</button>
@@ -27,61 +42,64 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const resultList = document.getElementById('result-list');
+            const quizzes = {{ quizzes | tojson | safe
+        }}; // 從後端傳遞測驗列表到前端
 
-            // 設定拖放事件
-            resultList.addEventListener('dragstart', (e) => {
-                e.dataTransfer.setData('text/plain', e.target.id);
-            });
+        // 為每個 "Re-select" 按鈕添加點擊事件
+        document.querySelectorAll('.reassign-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const attendee = button.getAttribute('data-attendee');
 
-            resultList.addEventListener('dragover', (e) => {
-                e.preventDefault();
-            });
+                // 建立彈窗選擇測驗
+                const quizOptions = quizzes.map(quiz => `<option value="${quiz}">${quiz}</option>`).join('');
+                const selectionHtml = `
+                        <div id="quiz-selection-popup" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black; z-index: 1000;">
+                            <h3>Select a new quiz for ${attendee}</h3>
+                            <select id="quiz-select">${quizOptions}</select>
+                            <button id="confirm-selection">Confirm</button>
+                            <button id="cancel-selection">Cancel</button>
+                        </div>
+                    `;
+                document.body.insertAdjacentHTML('beforeend', selectionHtml);
 
-            resultList.addEventListener('drop', (e) => {
-                e.preventDefault();
-                const draggedId = e.dataTransfer.getData('text/plain');
-                const draggedElement = document.getElementById(draggedId);
-                const dropTarget = e.target.closest('.result-item');
+                // 處理確認和取消按鈕
+                document.getElementById('confirm-selection').addEventListener('click', () => {
+                    const newQuiz = document.getElementById('quiz-select').value;
 
-                if (draggedElement && dropTarget && draggedElement !== dropTarget) {
-                    // 交換位置
-                    const draggedHTML = draggedElement.outerHTML;
-                    draggedElement.outerHTML = dropTarget.outerHTML;
-                    dropTarget.outerHTML = draggedHTML;
-
-                    // 更新結果
-                    updateResults();
-                }
-            });
-
-            function updateResults() {
-                const updatedResults = {};
-                document.querySelectorAll('.result-item').forEach((item, index) => {
-                    const attendee = item.querySelector('.attendee').textContent;
-                    const quiz = item.querySelector('.quiz').textContent;
-                    updatedResults[index + 1] = [attendee, quiz];
+                    // 發送更新請求到後端
+                    fetch('/reassign_quiz', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ attendee, quiz: newQuiz }),
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // 更新表格中的測驗
+                                const row = document.querySelector(`.reassign-btn[data-attendee="${attendee}"]`).closest('tr');
+                                row.querySelector('.quiz').textContent = newQuiz;
+                                alert('Quiz reassigned successfully!');
+                            } else {
+                                alert('Failed to reassign quiz.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while reassigning the quiz.');
+                        })
+                        .finally(() => {
+                            // 移除彈窗
+                            document.getElementById('quiz-selection-popup').remove();
+                        });
                 });
 
-                // 發送更新後的結果到後端
-                fetch('/update_results', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(updatedResults),
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to update results');
-                        }
-                        alert('Results updated successfully!');
-                    })
-                    .catch(error => {
-                        console.error(error);
-                        alert('Error updating results');
-                    });
-            }
+                document.getElementById('cancel-selection').addEventListener('click', () => {
+                    // 移除彈窗
+                    document.getElementById('quiz-selection-popup').remove();
+                });
+            });
+        });
         });
     </script>
 </body>

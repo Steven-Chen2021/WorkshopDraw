@@ -40,7 +40,7 @@ def index():
             results[i + 1] = (attendees[i], quizzes[i % len(quizzes)])  # Include line number as key
         
         print(results)  # Debugging: Print results to the console
-    return render_template('index.html', results=results)
+    return render_template('index.html', results=results, quizzes=quizzes)
 
 @app.route('/export', methods=['GET'])
 def export_results():
@@ -83,6 +83,29 @@ def update_results():
         return "Results updated successfully", 200
     except Exception as e:
         return f"Error updating results: {str(e)}", 500
+
+@app.route('/reassign_quiz', methods=['POST'])
+def reassign_quiz():
+    global results
+    try:
+        data = request.json
+        attendee_name = data.get('attendee')
+        new_quiz = data.get('quiz')
+
+        if not attendee_name or not new_quiz:
+            return "Invalid data format", 400
+
+        # 更新指定參與者的測驗
+        for line_no, (attendee, quiz) in results.items():
+            if attendee == attendee_name:
+                results[line_no] = (attendee, new_quiz)
+                break
+        else:
+            return "Attendee not found", 404
+
+        return "Attendee's quiz reassigned successfully", 200
+    except Exception as e:
+        return f"Error reassigning quiz: {str(e)}", 500
 
 if __name__ == '__main__':
     app.run(debug=True)
