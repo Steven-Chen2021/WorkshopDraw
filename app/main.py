@@ -69,5 +69,20 @@ def export_results():
         headers={"Content-Disposition": f"attachment;filename=random_draw_results.txt"}
     )
 
+@app.route('/update_results', methods=['POST'])
+def update_results():
+    global results
+    try:
+        # 接收 JSON 格式的拖放後結果
+        updated_results = request.json
+        if not updated_results:
+            return "Invalid data format", 400
+        
+        # 更新全域 results
+        results = {int(k): tuple(v) for k, v in updated_results.items()}
+        return "Results updated successfully", 200
+    except Exception as e:
+        return f"Error updating results: {str(e)}", 500
+
 if __name__ == '__main__':
     app.run(debug=True)

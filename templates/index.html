@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Draw App</title>
+</head>
+
+<body>
+    <h1>Random Draw Results</h1>
+    <form method="POST">
+        <button type="submit">Generate Random Draw</button>
+    </form>
+
+    <ul id="result-list">
+        {% for line_no, (attendee, quiz) in results.items() %}
+        <li id="result-{{ line_no }}" class="result-item" draggable="true">
+            <span class="attendee">{{ attendee }}</span> - <span class="quiz">{{ quiz }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form action="/export" method="GET">
+        <button type="submit">Export Results</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultList = document.getElementById('result-list');
+
+            // 設定拖放事件
+            resultList.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', e.target.id);
+            });
+
+            resultList.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+
+            resultList.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const draggedId = e.dataTransfer.getData('text/plain');
+                const draggedElement = document.getElementById(draggedId);
+                const dropTarget = e.target.closest('.result-item');
+
+                if (draggedElement && dropTarget && draggedElement !== dropTarget) {
+                    // 交換位置
+                    const draggedHTML = draggedElement.outerHTML;
+                    draggedElement.outerHTML = dropTarget.outerHTML;
+                    dropTarget.outerHTML = draggedHTML;
+
+                    // 更新結果
+                    updateResults();
+                }
+            });
+
+            function updateResults() {
+                const updatedResults = {};
+                document.querySelectorAll('.result-item').forEach((item, index) => {
+                    const attendee = item.querySelector('.attendee').textContent;
+                    const quiz = item.querySelector('.quiz').textContent;
+                    updatedResults[index + 1] = [attendee, quiz];
+                });
+
+                // 發送更新後的結果到後端
+                fetch('/update_results', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedResults),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to update results');
+                        }
+                        alert('Results updated successfully!');
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('Error updating results');
+                    });
+            }
+        });
+    </script>
+</body>
+
+</html>
