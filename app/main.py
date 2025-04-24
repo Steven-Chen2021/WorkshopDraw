@@ -12,7 +12,7 @@ attendees = [
     "Douglas Zheng", "Arnel Marquez", "Brian Gao", "Henry Nguyen/Brian Vu", 
     "Mary Li", "Ziv Lee", "Wilson Huang", "Harry Liao", 
     "Burhan/Tito Panji", "Jerome Chiu", "Chester Lee", 
-    "Terry Tseng", "Chloe Poon", "Yan Cheung", "Venurse Leong", "Guo Ren", 
+    "Terry Tseng", "Chloe Poon",  "Venurse Leong", "Guo Ren", 
     "Andy Kang", "Lucas Lu", "Bill He", "Packer Chen"
 ]
 quizzes = [
